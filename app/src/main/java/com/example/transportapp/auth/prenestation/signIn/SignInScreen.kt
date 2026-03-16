@@ -127,7 +127,9 @@ fun SignInScreen(
                     letterSpacing = 0.15.sp,
                     color = Color.White
                 )
+
                 Spacer(modifier = Modifier.height(3.dp))
+
                 TextField(
                     value = email,
                     onValueChange = viewModel::onEmailChanged,
@@ -157,6 +159,7 @@ fun SignInScreen(
                         .fillMaxWidth()
                         .padding(vertical = 5.dp)
                 )
+
                 if (emailError != null) {
                     Text(
                         text = emailError!!,
@@ -179,7 +182,9 @@ fun SignInScreen(
                     letterSpacing = 0.15.sp,
                     color = Color.White
                 )
+
                 Spacer(modifier = Modifier.height(3.dp))
+
                 TextField(
                     value = password,
                     onValueChange = viewModel::onPasswordChanged,
@@ -193,7 +198,8 @@ fun SignInScreen(
                         else
                             painterResource(id = R.drawable.ic_visibility_off)
 
-                        val description = if (passwordVisible) stringResource(R.string.hide) else stringResource(R.string.show)
+                        val description =
+                            if (passwordVisible) stringResource(R.string.hide) else stringResource(R.string.show)
 
                         IconButton(
                             onClick = { passwordVisible = !passwordVisible },
@@ -230,6 +236,7 @@ fun SignInScreen(
                         .fillMaxWidth()
                         .padding(vertical = 5.dp)
                 )
+
                 if (passwordError != null) {
                     Text(
                         text = passwordError!!,
@@ -257,7 +264,9 @@ fun SignInScreen(
                 .height(40.dp),
         ) {
             Text(
-                text = if (loginState is LoginState.Loading) stringResource(R.string.signing_in) else stringResource(R.string.sign_in),
+                text = if (loginState is LoginState.Loading) stringResource(R.string.signing_in) else stringResource(
+                    R.string.sign_in
+                ),
                 fontWeight = FontWeight.W600,
                 fontFamily = FontFamily(Font(R.font.roboto_semibold)),
                 modifier = Modifier
@@ -287,6 +296,7 @@ fun SignInScreen(
                     text = stringResource(R.string.no_account) + " ",
                     color = colorResource(R.color.text_white),
                 )
+
                 Text(
                     modifier = Modifier.clickable { navigateToSignUp() },
                     fontSize = 12.sp,
@@ -296,7 +306,9 @@ fun SignInScreen(
                     color = colorResource(R.color.green_btn),
                 )
             }
+
             Spacer(modifier = Modifier.height(8.dp))
+
             Row(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)

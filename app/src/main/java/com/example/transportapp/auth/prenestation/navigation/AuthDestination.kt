@@ -10,6 +10,6 @@ sealed interface AuthDestination {
     data object SignUpDestination : AuthDestination
 
     @Serializable
-    data object ForgotPassDestination : AuthDestination{
+    data object ForgotPassDestination : AuthDestination {
     }
 }

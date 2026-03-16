@@ -1,13 +1,23 @@
 package com.example.transportapp.main.routes.data.repository
 
-import com.example.transportapp.common.data.RouteApi
 import com.example.transportapp.common.domain.TransportRoute
 import com.example.transportapp.main.routes.domain.repository.RoutesRepository
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 class RoutesRepositoryImpl(
-    private val api: RouteApi
+    private val firestore: FirebaseFirestore
 ) : RoutesRepository {
+
     override suspend fun getRoutes(): List<TransportRoute> {
-        return api.getRoutes("15arTK7XT2b7Yv4BJsmDctA4Hg-BbS8-q").routes
+        return try {
+            val snapshot = firestore.collection("routes").get().await()
+            snapshot.documents.mapNotNull { document ->
+                val route = document.toObject(TransportRoute::class.java)
+                route?.copy(id = document.id.hashCode())
+            }
+        } catch (e: Exception) {
+            throw e
+        }
     }
 }

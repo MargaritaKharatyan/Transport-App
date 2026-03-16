@@ -15,6 +15,9 @@ import androidx.navigation.compose.composable
 import com.example.transportapp.R
 import com.example.transportapp.auth.prenestation.AuthScreen
 import com.example.transportapp.main.MainScreen
+import com.google.firebase.auth.FirebaseAuth
+
+val auth = FirebaseAuth.getInstance()
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -45,20 +48,12 @@ fun AppNavigation(
             }
 
             composable<AppDestination.MainDestination> {
-//                    MainScreen(
-//                        navigateToLogin = {
-//                            navController.navigate("signInScreen") {
-//                                popUpTo("signInScreen") {
-//                                    inclusive = true
-//                                }
-//                            }
-//                        }
-//                    )
-
                 MainScreen(
                     navigateToSignIn = {
-                        if (!navController.popBackStack()) {
-                            navController.navigate(AppDestination.AuthDestination)
+                        auth.signOut()
+                        navController.navigate(AppDestination.AuthDestination) {
+                            popUpTo(0) { inclusive = true }
+                            launchSingleTop = true
                         }
                     },
                 )

@@ -2,6 +2,7 @@ package com.example.transportapp.auth.prenestation.forgotPass
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import com.example.transportapp.core.ErrorMessages
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,10 +36,10 @@ class ForgotPassViewModel : ViewModel() {
 
     private fun isEmailValid(): Boolean {
         if (_email.value.isBlank()) {
-            _emailError.value = "This is a required field"
+            _emailError.value = ErrorMessages.REQUIRED_FIELD_ERROR
             return false
         } else if (!Patterns.EMAIL_ADDRESS.matcher(_email.value).matches()) {
-            _emailError.value = "Check email format"
+            _emailError.value = ErrorMessages.EMAIL_FORMAT_ERROR
             return false
         }
         return true
@@ -57,14 +58,14 @@ class ForgotPassViewModel : ViewModel() {
 
                     if (signInMethods.isNullOrEmpty()) {
                         _resetState.value =
-                            ResetPasswordState.Error("A user with this email wasn't found. Try another one.")
+                            ResetPasswordState.Error(ErrorMessages.USER_FOUND_ERROR)
                         _isButtonEnabled.value = true
                     } else {
                         sendActualResetEmail()
                     }
                 } else {
                     _resetState.value =
-                        ResetPasswordState.Error("Check Error: ${checkTask.exception?.message}")
+                        ResetPasswordState.Error(ErrorMessages.CHECK_ERROR + checkTask.exception?.message)
                     _isButtonEnabled.value = true
                 }
             }
@@ -78,7 +79,7 @@ class ForgotPassViewModel : ViewModel() {
                     _resetState.value = ResetPasswordState.Success
                 } else {
                     _resetState.value = ResetPasswordState.Error(
-                        task.exception?.message ?: "Failed to send email."
+                        task.exception?.message ?: ErrorMessages.EMAIL_SENDING_ERROR
                     )
                 }
             }

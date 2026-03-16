@@ -3,5 +3,5 @@ package com.example.transportapp.auth.domain.repository
 interface AuthRepository {
     suspend fun signUp(email: String, password: String): Result<Unit>
     suspend fun signIn(email: String, password: String): Result<Unit>
-
+    fun isUserSignedIn(): Boolean
 }

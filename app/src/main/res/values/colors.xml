@@ -16,9 +16,10 @@
     <color name="orange_btn">#FD5B1C</color>
     <color name="reset_pass_btn">#052EE2</color>
     <color name="text">#C0C0C1</color>
-    <color name="light_milk">#E6C3C3</color>
+    <color name="light_milk">#F2E0E0</color>
+    <color name="light_beige">#977D7D</color>
 
 
     <color name="light_pink_background">#FFF5F4FF</color>
-
+    <color name="dark_blue">#05054D</color>
 </resources>

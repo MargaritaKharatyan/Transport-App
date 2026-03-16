@@ -1,11 +1,9 @@
 import org.gradle.kotlin.dsl.implementation
 plugins {
     alias(libs.plugins.android.application)
-//    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     id("com.google.gms.google-services")
-
 }
 
 android {
@@ -63,24 +61,22 @@ dependencies {
 
 
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.firebase.crashlytics.buildtools)
 
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation (libs.firebase.auth.ktx)
-    implementation(libs.google.firebase.auth.ktx)
+    implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
+    implementation(libs.kotlinx.coroutines.play.services) // Для .await()
+
     implementation(libs.kotlinx.coroutines.play.services)
 
     //  Koin
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.android)
+//    implementation(libs.koin.android)
 
     //  Kotlin Serialization
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.serialization.core)
 
     //Retrofit
     implementation(libs.retrofit)
@@ -90,4 +86,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.androidx.material)
+
+    implementation(libs.accompanist.swiperefresh)
 }

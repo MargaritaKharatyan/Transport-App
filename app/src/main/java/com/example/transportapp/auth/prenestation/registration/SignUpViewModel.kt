@@ -2,6 +2,7 @@ package com.example.transportapp.auth.prenestation.registration
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import com.example.transportapp.core.ErrorMessages
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +20,6 @@ class SignUpViewModel : ViewModel() {
     private val _confirmPassword = MutableStateFlow("")
     val confirmPassword: StateFlow<String> = _confirmPassword.asStateFlow()
 
-    // Error states
     private val _emailError = MutableStateFlow<String?>(null)
     val emailError: StateFlow<String?> = _emailError.asStateFlow()
 
@@ -68,35 +68,35 @@ class SignUpViewModel : ViewModel() {
         val currentConfirm = _confirmPassword.value
 
         if (currentEmail.isBlank()) {
-            _emailError.value = "This is a required field"
+            _emailError.value = ErrorMessages.REQUIRED_FIELD_ERROR
             isValid = false
         } else if (!Patterns.EMAIL_ADDRESS.matcher(currentEmail).matches()) {
-            _emailError.value = "Check email format"
+            _emailError.value = ErrorMessages.EMAIL_FORMAT_ERROR
             isValid = false
         }
 
         if (currentPassword.isBlank()) {
-            _passwordError.value = "This is a required field"
+            _passwordError.value = ErrorMessages.REQUIRED_FIELD_ERROR
             isValid = false
         } else if (currentPassword.length !in 8..20) {
-            _passwordError.value = "Password must be between 8 and 20 characters"
+            _passwordError.value = ErrorMessages.PASS_LENGTH_ERROR
             isValid = false
         } else if (!currentPassword.any { it.isUpperCase() }) {
-            _passwordError.value = "Must contain at least one uppercase letter (A-Z)"
+            _passwordError.value = ErrorMessages.PASS_LETTERS_ERROR
             isValid = false
         } else if (!currentPassword.any { it.isDigit() }) {
-            _passwordError.value = "Must contain at least one number (0-9)"
+            _passwordError.value = ErrorMessages.PASS_NUMBERS_ERROR
             isValid = false
         } else if (!currentPassword.any { !it.isLetterOrDigit() }) {
-            _passwordError.value = "Must contain at least one special symbol"
+            _passwordError.value = ErrorMessages.SPECIAL_SYMBOLS
             isValid = false
         }
 
         if (currentConfirm.isBlank()) {
-            _confirmPasswordError.value = "This is a required field"
+            _confirmPasswordError.value = ErrorMessages.REQUIRED_FIELD_ERROR
             isValid = false
         } else if (currentPassword != currentConfirm) {
-            _confirmPasswordError.value = "Passwords do not match"
+            _confirmPasswordError.value = ErrorMessages.PASS_MATCH_ERROR
             isValid = false
         }
 
@@ -116,7 +116,7 @@ class SignUpViewModel : ViewModel() {
                     _registrationState.value = RegistrationState.Success
                 } else {
                     _registrationState.value = RegistrationState.Error(
-                        task.exception?.message ?: "Registration failed."
+                        task.exception?.message ?: ErrorMessages.REGISTER_FAILED_ERROR
                     )
                 }
             }

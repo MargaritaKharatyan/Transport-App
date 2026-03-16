@@ -139,7 +139,9 @@ fun SignUpScreen(
                     letterSpacing = 0.15.sp,
                     color = Color.White
                 )
+
                 Spacer(modifier = Modifier.height(3.dp))
+
                 TextField(
                     value = email,
                     onValueChange = viewModel::onEmailChanged,
@@ -168,6 +170,7 @@ fun SignUpScreen(
                         .fillMaxWidth()
                         .padding(vertical = 5.dp)
                 )
+
                 if (emailError != null) {
                     Text(
                         text = emailError!!,
@@ -177,7 +180,9 @@ fun SignUpScreen(
                     )
                 }
             }
+
             Spacer(modifier = Modifier.height(16.dp))
+
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = stringResource(R.string.password),
@@ -186,7 +191,9 @@ fun SignUpScreen(
                     fontFamily = FontFamily(Font(R.font.roboto_medium)),
                     color = Color.White
                 )
+
                 Spacer(modifier = Modifier.height(3.dp))
+
                 TextField(
                     value = password,
                     onValueChange = viewModel::onPasswordChanged,
@@ -234,6 +241,7 @@ fun SignUpScreen(
                         .fillMaxWidth()
                         .padding(vertical = 5.dp)
                 )
+
                 if (passwordError != null) {
                     Text(
                         text = passwordError!!,
@@ -254,7 +262,9 @@ fun SignUpScreen(
                     fontFamily = FontFamily(Font(R.font.roboto_medium)),
                     color = Color.White
                 )
+
                 Spacer(modifier = Modifier.height(3.dp))
+
                 TextField(
                     value = confirmPassword,
                     onValueChange = viewModel::onConfirmPasswordChanged,
@@ -302,6 +312,7 @@ fun SignUpScreen(
                         .fillMaxWidth()
                         .padding(vertical = 5.dp)
                 )
+
                 if (confirmPasswordError != null) {
                     Text(
                         text = confirmPasswordError!!,
@@ -352,6 +363,7 @@ fun SignUpScreen(
                 color = Color.White,
                 fontSize = 14.sp
             )
+
             Text(
                 text = stringResource(R.string.sign_in),
                 color = colorResource(R.color.orange_btn),

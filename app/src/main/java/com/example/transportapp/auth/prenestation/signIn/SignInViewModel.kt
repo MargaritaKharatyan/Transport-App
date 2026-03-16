@@ -2,6 +2,7 @@ package com.example.transportapp.auth.prenestation.signIn
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import com.example.transportapp.core.ErrorMessages
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,6 @@ class SignInViewModel : ViewModel() {
     private val _password = MutableStateFlow("")
     val password: StateFlow<String> = _password.asStateFlow()
 
-    // States for field validation errors
     private val _emailError = MutableStateFlow<String?>(null)
     val emailError: StateFlow<String?> = _emailError.asStateFlow()
 
@@ -53,17 +53,17 @@ class SignInViewModel : ViewModel() {
         val emailValue = _email.value.trim()
 
         if (emailValue.isBlank()) {
-            _emailError.value = "Email cannot be empty"
+            _emailError.value = ErrorMessages.EMPTY_EMAIL_ERROR
             isValid = false
         } else if (!Patterns.EMAIL_ADDRESS.matcher(emailValue).matches()) {
-            _emailError.value = "Enter a valid email (e.g., example@gmail.com)"
+            _emailError.value = ErrorMessages.VALID_EMAIL_ERROR
             isValid = false
         } else {
             _emailError.value = null
         }
 
         if (_password.value.isBlank()) {
-            _passwordError.value = "Password is required"
+            _passwordError.value = ErrorMessages.PASSWORD_ERROR
             isValid = false
         }
 
@@ -84,9 +84,9 @@ class SignInViewModel : ViewModel() {
                 } else {
                     val exception = task.exception
                     val errorMessage = if (exception is FirebaseNetworkException) {
-                        "Network error. Please check your internet connection."
+                        ErrorMessages.NETWORK_ERROR
                     } else {
-                        "Invalid email or password."
+                        ErrorMessages.INVALID_DATA
                     }
                     _loginState.value = LoginState.Error(errorMessage)
                 }

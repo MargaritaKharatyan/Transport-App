@@ -2,7 +2,6 @@ package com.example.transportapp
 
 import android.app.Application
 import com.example.transportapp.auth.di.authModule
-import com.example.transportapp.common.data.di.networkModule
 import com.example.transportapp.main.routes.data.di.routesDataModule
 import com.example.transportapp.main.routes.domain.di.routesDomainModule
 import com.example.transportapp.main.routes.presentation.di.routesPresentationModule
@@ -14,7 +13,7 @@ import org.koin.core.context.GlobalContext.startKoin
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
-        Firebase.initialize(this) // This ensures Firebase is ready
+        Firebase.initialize(this)
         startKoin {
             androidContext(this@App)
             modules(
@@ -23,7 +22,6 @@ class App : Application() {
                 routesDataModule,
                 routesDomainModule,
                 routesPresentationModule,
-                networkModule,
             )
         }
     }

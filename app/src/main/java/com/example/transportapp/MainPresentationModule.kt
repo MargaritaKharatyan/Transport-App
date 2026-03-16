@@ -10,5 +10,5 @@ val mainPresentationModule = module {
     viewModel { SignInViewModel() }
     viewModel { SignUpViewModel() }
     viewModel { ForgotPassViewModel() }
-
+    viewModel { MainViewModel(get()) }
 }

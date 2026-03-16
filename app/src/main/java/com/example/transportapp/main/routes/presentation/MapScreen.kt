@@ -18,8 +18,6 @@ import androidx.compose.ui.unit.sp
 fun MapScreen(
     modifier: Modifier = Modifier,
     navigateToRoutes: () -> Unit,
-//    navigateToLogin: () -> Unit = {},
-//    navigateToMain: () -> Unit = {}
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
