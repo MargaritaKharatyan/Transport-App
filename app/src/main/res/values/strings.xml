@@ -10,6 +10,7 @@
     <string name="registration">Register</string>
     <string name="forgot_pass">Forgot password</string>
     <string name="repeat_pass">Repeat Password</string>
+    <string name="reset_pass">Reset password</string>
 
     <string name="try_another_email">Try another email</string>
     <string name="user_exists">User Exists</string>
@@ -19,5 +20,13 @@
     <string name="repeat_password">Repeat password</string>
     <string name="name">Name</string>
     <string name="surname">Surname</string>
-
+    <string name="send">Sending…</string>
+    <string name="mail_sent">The letter has been sent!\nCheck your email</string>
+    <string name="sending_mail">Enter your email and we will send you a link to reset your password</string>
+    <string name="signing_up">Sign up…</string>
+    <string name="signing_in">Sign in…</string>
+    <string name="have_account">Already have an account ?</string>
+    <string name="hide">Hide password</string>
+    <string name="show">Show password</string>
+    <string name="show_route">Show route</string>
 </resources>

@@ -14,6 +14,10 @@
     <color name="green_btn">#12B956</color>
     <color name="divider">#4D555E</color>
     <color name="orange_btn">#FD5B1C</color>
+    <color name="reset_pass_btn">#052EE2</color>
+    <color name="text">#C0C0C1</color>
+    <color name="light_milk">#E6C3C3</color>
+
 
     <color name="light_pink_background">#FFF5F4FF</color>
 

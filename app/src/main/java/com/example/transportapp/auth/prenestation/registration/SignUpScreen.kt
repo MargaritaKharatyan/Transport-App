@@ -52,7 +52,6 @@ import androidx.compose.ui.unit.sp
 import com.example.transportapp.R
 import com.example.transportapp.auth.prenestation.registration.RegistrationState
 import com.example.transportapp.auth.prenestation.registration.SignUpViewModel
-import com.example.transportapp.auth.prenestation.signIn.SignInViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -65,10 +64,9 @@ fun SignUpScreen(
     }
     val context = LocalContext.current
 
-    // States from ViewModel
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
-    val confirmPassword by viewModel.confirmPassword.collectAsState() // Добавлено
+    val confirmPassword by viewModel.confirmPassword.collectAsState()
 
     val emailError by viewModel.emailError.collectAsState()
     val passwordError by viewModel.passwordError.collectAsState()
@@ -77,19 +75,25 @@ fun SignUpScreen(
     val isSignUpEnabled by viewModel.isSignUpEnabled.collectAsState()
     val registrationState by viewModel.registrationState.collectAsState()
 
-    // Local UI States for password visibility
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(registrationState) {
         when (registrationState) {
             is RegistrationState.Success -> {
-                Toast.makeText(context, "Account created successfully :)", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Account created successfully :)", Toast.LENGTH_SHORT)
+                    .show()
                 navigateToSignIn()
             }
+
             is RegistrationState.Error -> {
-                Toast.makeText(context, (registrationState as RegistrationState.Error).message, Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    (registrationState as RegistrationState.Error).message,
+                    Toast.LENGTH_LONG
+                ).show()
             }
+
             else -> {}
         }
     }
@@ -154,7 +158,7 @@ fun SignUpScreen(
                         focusedContainerColor = colorResource(R.color.light_gray),
                         unfocusedContainerColor = colorResource(R.color.light_gray),
                         focusedPlaceholderColor = colorResource(R.color.text_white),
-                        unfocusedPlaceholderColor = colorResource(R.color.text_white),
+                        unfocusedPlaceholderColor = colorResource(R.color.text),
                         focusedTextColor = colorResource(R.color.text_white),
                         unfocusedTextColor = colorResource(R.color.text_white),
                         focusedIndicatorColor = Color.Transparent,
@@ -165,7 +169,12 @@ fun SignUpScreen(
                         .padding(vertical = 5.dp)
                 )
                 if (emailError != null) {
-                    Text(text = emailError!!, color = MaterialTheme.colorScheme.error, fontSize = 12.sp, modifier = Modifier.padding(start = 16.dp))
+                    Text(
+                        text = emailError!!,
+                        color = MaterialTheme.colorScheme.error,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -186,7 +195,10 @@ fun SignUpScreen(
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     trailingIcon = {
-                        val image = if (passwordVisible) painterResource(R.drawable.ic_visibility) else painterResource(R.drawable.ic_visibility_off)
+                        val image =
+                            if (passwordVisible) painterResource(R.drawable.ic_visibility) else painterResource(
+                                R.drawable.ic_visibility_off
+                            )
                         val description = if (passwordVisible) "Hide password" else "Show password"
                         IconButton(
                             onClick = { passwordVisible = !passwordVisible },
@@ -211,17 +223,24 @@ fun SignUpScreen(
                         focusedContainerColor = colorResource(R.color.light_gray),
                         unfocusedContainerColor = colorResource(R.color.light_gray),
                         focusedPlaceholderColor = colorResource(R.color.text_white),
-                        unfocusedPlaceholderColor = colorResource(R.color.text_white),
+                        unfocusedPlaceholderColor = colorResource(R.color.text),
                         focusedTextColor = colorResource(R.color.text_white),
                         unfocusedTextColor = colorResource(R.color.text_white),
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         errorIndicatorColor = Color.Transparent
                     ),
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp)
                 )
                 if (passwordError != null) {
-                    Text(text = passwordError!!, color = MaterialTheme.colorScheme.error, fontSize = 12.sp, modifier = Modifier.padding(start = 16.dp))
+                    Text(
+                        text = passwordError!!,
+                        color = MaterialTheme.colorScheme.error,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
                 }
             }
 
@@ -237,14 +256,17 @@ fun SignUpScreen(
                 )
                 Spacer(modifier = Modifier.height(3.dp))
                 TextField(
-                    value = confirmPassword, // Привязано к confirmPassword!
-                    onValueChange = viewModel::onConfirmPasswordChanged, // Вызов правильного метода!
+                    value = confirmPassword,
+                    onValueChange = viewModel::onConfirmPasswordChanged,
                     singleLine = true,
                     isError = confirmPasswordError != null,
                     visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     trailingIcon = {
-                        val image = if (passwordVisible) painterResource(R.drawable.ic_visibility) else painterResource(R.drawable.ic_visibility_off)
+                        val image =
+                            if (passwordVisible) painterResource(R.drawable.ic_visibility) else painterResource(
+                                R.drawable.ic_visibility_off
+                            )
                         val description = if (passwordVisible) "Hide password" else "Show password"
                         IconButton(
                             onClick = { passwordVisible = !passwordVisible },
@@ -261,7 +283,7 @@ fun SignUpScreen(
                     shape = RoundedCornerShape(30.dp),
                     placeholder = {
                         Text(
-                            text = stringResource(R.string.enter_password), // Или stringResource(R.string.repeat_pass)
+                            text = stringResource(R.string.enter_password),
                             fontFamily = FontFamily(Font(R.font.roboto_regular)),
                         )
                     },
@@ -269,30 +291,37 @@ fun SignUpScreen(
                         focusedContainerColor = colorResource(R.color.light_gray),
                         unfocusedContainerColor = colorResource(R.color.light_gray),
                         focusedPlaceholderColor = colorResource(R.color.text_white),
-                        unfocusedPlaceholderColor = colorResource(R.color.text_white),
+                        unfocusedPlaceholderColor = colorResource(R.color.text),
                         focusedTextColor = colorResource(R.color.text_white),
                         unfocusedTextColor = colorResource(R.color.text_white),
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         errorIndicatorColor = Color.Transparent
                     ),
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 5.dp)
                 )
                 if (confirmPasswordError != null) {
-                    Text(text = confirmPasswordError!!, color = MaterialTheme.colorScheme.error, fontSize = 12.sp, modifier = Modifier.padding(start = 16.dp))
+                    Text(
+                        text = confirmPasswordError!!,
+                        color = MaterialTheme.colorScheme.error,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
                 }
             }
         }
 
         Button(
             enabled = isSignUpEnabled,
-            onClick = { viewModel.register() }, // Здесь вызываем register, а не navigateToSignIn
+            onClick = { viewModel.register() },
             shape = RoundedCornerShape(30.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(R.color.orange_btn),
                 contentColor = colorResource(R.color.text_white),
                 disabledContentColor = colorResource(R.color.text_white),
-                disabledContainerColor = colorResource(R.color.orange_btn).copy(alpha = 0.5f), // Dim when loading
+                disabledContainerColor = colorResource(R.color.orange_btn).copy(alpha = 0.5f),
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -300,23 +329,26 @@ fun SignUpScreen(
                 .height(40.dp),
         ) {
             Text(
-                text = if (registrationState is RegistrationState.Loading) "Signing up..." else stringResource(R.string.sign_up), // Изменил текст кнопки на Sign Up
+                text = if (registrationState is RegistrationState.Loading) stringResource(R.string.signing_up) else stringResource(
+                    R.string.sign_up
+                ),
                 fontWeight = FontWeight.W600,
                 fontFamily = FontFamily(Font(R.font.roboto_semibold)),
-                modifier = Modifier.fillMaxHeight().align(Alignment.CenterVertically),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .align(Alignment.CenterVertically),
                 textAlign = TextAlign.Center,
             )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- ССЫЛКА НА ВХОД ---
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Already have an account? ",
+                text = stringResource(R.string.have_account) + " ",
                 color = Color.White,
                 fontSize = 14.sp
             )
@@ -328,96 +360,5 @@ fun SignUpScreen(
                 modifier = Modifier.clickable { navigateToSignIn() }
             )
         }
-
     }
 }
-
-//
-//@Composable
-//fun SignUpScreen(
-//    navigateToSignIn: () -> Unit,
-//    viewModel: SignUpViewModel = koinViewModel()
-//) {
-//    val context = LocalContext.current
-//
-//    val email by viewModel.email.collectAsState()
-//    val password by viewModel.password.collectAsState()
-//    val confirmPassword by viewModel.confirmPassword.collectAsState()
-//    val isEnabled by viewModel.isSignUpEnabled.collectAsState()
-//    val registrationState by viewModel.registrationState.collectAsState()
-//
-//    LaunchedEffect(registrationState) {
-//        when (registrationState) {
-//            is RegistrationState.Success -> {
-//                Toast.makeText(context, "Account created successfully :)", Toast.LENGTH_SHORT).show()
-//                navigateToSignIn()
-//            }
-//            is RegistrationState.Error -> {
-//                Toast.makeText(context, (registrationState as RegistrationState.Error).message, Toast.LENGTH_SHORT).show()
-//            }
-//            else -> {}
-//        }
-//    }
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp)
-//            .background(Color.White),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Spacer(modifier = Modifier.height(50.dp))
-//        Text(text = "Sign Up", fontSize = 40.sp, fontWeight = FontWeight.Bold)
-//
-//        Spacer(modifier = Modifier.height(20.dp))
-//
-//        // Email
-//        TextField(
-//            value = email,
-//            onValueChange = viewModel::onEmailChanged,
-//            placeholder = { Text("Email") },
-//            singleLine = true,
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(10.dp))
-//
-//        // Password
-//        TextField(
-//            value = password,
-//            onValueChange = viewModel::onPasswordChanged,
-//            placeholder = { Text("Password") },
-//            singleLine = true,
-//            visualTransformation = PasswordVisualTransformation(),
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//        Spacer(modifier = Modifier.height(10.dp))
-//
-//        // Confirm Password
-//        TextField(
-//            value = confirmPassword,
-//            onValueChange = viewModel::onConfirmPasswordChanged,
-//            placeholder = { Text("Confirm Password") },
-//            singleLine = true,
-//            visualTransformation = PasswordVisualTransformation(),
-//            modifier = Modifier.fillMaxWidth()
-//        )
-//
-//        Spacer(modifier = Modifier.height(20.dp))
-//
-//        Button(
-//            onClick = { viewModel.register() },
-//            enabled = isEnabled,
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            Text("Sign Up")
-//        }
-//
-//        Spacer(modifier = Modifier.height(20.dp))
-//
-//        Text(
-//            text = "Already have an account? Sign In",
-//            color = Color.Blue,
-//            modifier = Modifier.clickable { navigateToSignIn() }
-//        )
-//    }
-//}

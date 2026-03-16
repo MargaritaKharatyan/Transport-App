@@ -2,13 +2,10 @@ package com.example.transportapp.auth.prenestation.registration
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.transportapp.auth.domain.usecase.SignUpUseCase
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 class SignUpViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -66,29 +63,39 @@ class SignUpViewModel : ViewModel() {
     private fun checkAllFields(): Boolean {
         var isValid = true
 
-        // Email validation
-        if (_email.value.isBlank()) {
+        val currentEmail = _email.value
+        val currentPassword = _password.value
+        val currentConfirm = _confirmPassword.value
+
+        if (currentEmail.isBlank()) {
             _emailError.value = "This is a required field"
             isValid = false
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(_email.value).matches()) {
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(currentEmail).matches()) {
             _emailError.value = "Check email format"
             isValid = false
         }
 
-        // Password validation
-        if (_password.value.isBlank()) {
+        if (currentPassword.isBlank()) {
             _passwordError.value = "This is a required field"
             isValid = false
-        } else if (_password.value.length < 7) {
-            _passwordError.value = "Password should be at least 7 characters long"
+        } else if (currentPassword.length !in 8..20) {
+            _passwordError.value = "Password must be between 8 and 20 characters"
+            isValid = false
+        } else if (!currentPassword.any { it.isUpperCase() }) {
+            _passwordError.value = "Must contain at least one uppercase letter (A-Z)"
+            isValid = false
+        } else if (!currentPassword.any { it.isDigit() }) {
+            _passwordError.value = "Must contain at least one number (0-9)"
+            isValid = false
+        } else if (!currentPassword.any { !it.isLetterOrDigit() }) {
+            _passwordError.value = "Must contain at least one special symbol"
             isValid = false
         }
 
-        // Confirm Password validation
-        if (_confirmPassword.value.isBlank()) {
+        if (currentConfirm.isBlank()) {
             _confirmPasswordError.value = "This is a required field"
             isValid = false
-        } else if (_password.value != _confirmPassword.value) {
+        } else if (currentPassword != currentConfirm) {
             _confirmPasswordError.value = "Passwords do not match"
             isValid = false
         }
