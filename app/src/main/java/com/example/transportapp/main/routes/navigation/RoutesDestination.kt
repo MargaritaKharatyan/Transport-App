@@ -7,5 +7,5 @@ sealed interface RoutesDestination {
     data object RoutesScreenDestination : RoutesDestination
 
     @Serializable
-    data object MapScreenDestination : RoutesDestination
+    data class MapScreenDestination(val routeId: Int) : RoutesDestination
 }

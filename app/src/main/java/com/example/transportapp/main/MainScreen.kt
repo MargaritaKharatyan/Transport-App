@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.transportapp.main.routes.navigation.RoutesDestination
 import com.example.transportapp.main.routes.presentation.MapScreen
 import com.example.transportapp.main.routes.presentation.RoutesListScreen
@@ -38,13 +39,16 @@ fun MainScreen(
         ) {
             composable<RoutesDestination.RoutesScreenDestination> {
                 RoutesListScreen(
-                    navigateToSignIn = navigateToSignIn
-                ) {
-                    navController.navigate(RoutesDestination.MapScreenDestination)
-                }
+                    navigateToSignIn = navigateToSignIn,
+                    navigateToMap = { routeId ->
+                        navController.navigate(RoutesDestination.MapScreenDestination(routeId))
+                    }
+                )
             }
-            composable<RoutesDestination.MapScreenDestination> {
+            composable<RoutesDestination.MapScreenDestination> { backStackEntry ->
+                val destination: RoutesDestination.MapScreenDestination = backStackEntry.toRoute()
                 MapScreen(
+                    routeId = destination.routeId,
                     navigateToRoutes = {
                         if (!navController.popBackStack()) {
                             navController.navigate(RoutesDestination.RoutesScreenDestination)

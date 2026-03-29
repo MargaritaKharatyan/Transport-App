@@ -16,5 +16,8 @@ data class RouteUiModel(
     val firstStopCoords: GeoPoint?,
 
     @Serializable(with = GeoPointSerializer::class)
-    val lastStopCoords: GeoPoint?
+    val lastStopCoords: GeoPoint?,
+
+    val intermediateStops: List<@Serializable(with = GeoPointSerializer::class) GeoPoint> = emptyList(),
+
 )

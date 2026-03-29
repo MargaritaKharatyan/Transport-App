@@ -61,7 +61,8 @@ class RoutesViewModel(
                         firstStopName = startAddress,
                         lastStopName = endAddress,
                         firstStopCoords = route.firstStopCoords,
-                        lastStopCoords = route.lastStopCoords
+                        lastStopCoords = route.lastStopCoords,
+                        intermediateStops = route.intermediateStops,
                     )
                 }
 
@@ -115,7 +116,7 @@ class RoutesViewModel(
 
                 android.util.Log.d(
                     "SORT_DEBUG",
-                    "Route ${route.id}: Осталось $remainingSeconds сек."
+                    "Route ${route.id}: $remainingSeconds seconds left."
                 )
 
                 remainingSeconds
