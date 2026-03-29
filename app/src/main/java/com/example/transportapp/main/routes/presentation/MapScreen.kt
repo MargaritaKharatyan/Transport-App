@@ -1,9 +1,12 @@
 package com.example.transportapp.main.routes.presentation
 
 import android.Manifest
+import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartIntentSenderForResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +24,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -32,6 +36,11 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.example.transportapp.R
 import com.example.transportapp.main.routes.presentation.components.createCircleMarker
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.Priority
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.RequestPoint
@@ -46,6 +55,7 @@ import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.map.MapObjectCollection
 import com.yandex.mapkit.mapview.MapView
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -56,6 +66,7 @@ fun MapScreen(
     navigateToRoutes: () -> Unit,
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val mapView = remember { MapView(context) }
     val mapObjects: MapObjectCollection =
         remember { mapView.mapWindow.map.mapObjects.addCollection() }
@@ -72,6 +83,24 @@ fun MapScreen(
         if (granted) {
             userLocationLayer.isVisible = true
             userLocationLayer.isHeadingEnabled = true
+        }
+    }
+
+    val settingResultLauncher = rememberLauncherForActivityResult(
+        contract = StartIntentSenderForResult()
+    ) { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            scope.launch {
+                kotlinx.coroutines.delay(1500)
+
+                userLocationLayer.cameraPosition()?.let { pos ->
+                    mapView.mapWindow.map.move(
+                        CameraPosition(pos.target, 16f, 0f, 0f),
+                        Animation(Animation.Type.SMOOTH, 1f),
+                        null
+                    )
+                }
+            }
         }
     }
 
@@ -217,12 +246,54 @@ fun MapScreen(
 
         FloatingActionButton(
             onClick = {
-                val userLocation = userLocationLayer.cameraPosition()
-                if (userLocation != null) {
-                    mapView.mapWindow.map.move(
-                        CameraPosition(userLocation.target, 16f, 0f, 0f),
-                        Animation(Animation.Type.SMOOTH, 1f),
-                        null
+                val hasFineLocation = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+                val hasCoarseLocation = ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+
+                if (hasFineLocation || hasCoarseLocation) {
+                    val locationRequest =
+                        LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000).build()
+                    val builder =
+                        LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+                    val client = LocationServices.getSettingsClient(context)
+                    val task = client.checkLocationSettings(builder.build())
+
+                    task.addOnSuccessListener {
+                        val userLocation = userLocationLayer.cameraPosition()
+                        if (userLocation != null) {
+                            mapView.mapWindow.map.move(
+                                CameraPosition(userLocation.target, 16f, 0f, 0f),
+                                Animation(Animation.Type.SMOOTH, 1f),
+                                null
+                            )
+                        }
+                    }
+
+                    task.addOnFailureListener { exception ->
+                        if (exception is ResolvableApiException) {
+                            try {
+                                val intentSenderRequest =
+                                    IntentSenderRequest.Builder(exception.resolution).build()
+                                settingResultLauncher.launch(intentSenderRequest)
+                            } catch (sendEx: Exception) {
+                            }
+                        } else {
+                            val intent =
+                                android.content.Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                            context.startActivity(intent)
+                        }
+                    }
+                } else {
+                    permissionLauncher.launch(
+                        arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        )
                     )
                 }
             },

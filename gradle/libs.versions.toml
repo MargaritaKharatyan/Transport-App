@@ -23,6 +23,7 @@ firebaseCrashlyticsBuildtools = "3.0.6"
 koin-bom = "4.2.0"
 
 # Networking & Serialization
+playServicesLocation = "21.3.0"
 retrofit = "3.0.0"
 converterGson = "3.0.0"
 kotlinxSerializationJson = "1.10.0"
@@ -71,6 +72,7 @@ koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compos
 
 # Utilities
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }

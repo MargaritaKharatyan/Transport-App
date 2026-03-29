@@ -92,4 +92,6 @@ dependencies {
 
     // Yandex Maps
     implementation(libs.yandex.maps)
+
+    implementation(libs.play.services.location)
 }
